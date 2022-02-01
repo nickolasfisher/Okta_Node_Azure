@@ -1,0 +1,154 @@
+extends layout
+
+block content
+
+  h1#deploy-a-node-js-application-to-azure Deploy a Node.JS Application to Azure
+  p
+    | This repository shows you how to use Okta in a Node.js application and how to deploy the application to Azure. Please read
+    a(href='https://developer.okta.com/blog/2021/xyz') Deploy a NodeJs application to Azure
+    |  to see how it was created.
+  p
+    strong Prerequisites:
+  ul
+    li
+      a(href='https://nodejs.org/en/') Node.js
+    li
+      a(href='https://azure.microsoft.com') Azure Account
+    li
+      a(href='https://code.visualstudio.com/download') Visual Studio Code
+    li
+      a(href='https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azureappservice') VS Code Azure App Service Extension
+    li
+      a(href='https://cli.okta.com') Okta CLI
+  blockquote
+    p
+      a(href='https://developer.okta.com/') Okta
+      |  has Authentication and User Management APIs that reduce development time with instant-on, scalable user infrastructure. Okta's intuitive API and expert support make it easy for developers to authenticate, manage and secure users and roles in any application.
+  ul
+    li
+      a(href='#getting-started') Getting Started
+    li
+      a(href='#links') Links
+    li
+      a(href='#help') Help
+    li
+      a(href='#license') License
+  h2#getting-started Getting Started
+  p To run this example locally, run the following commands:
+  pre.
+  h3#create-an-oidc-application-in-okta Create an OIDC Application in Okta
+  p
+    | Create a free developer account with the following command using the
+    a(href='https://cli.okta.com') Okta CLI
+    | :
+  pre.
+  p
+    | If you already have a developer account, use
+    code okta login
+    |  to integrate it with the Okta CLI.
+  p
+    | Provide the required information. Once you register, create a client application in Okta with the following command:
+  pre.
+  p You will be prompted to select the following options:
+  ul
+    li
+      | Type of Application:
+      strong 1: Web
+    li
+      | Framework of Application:
+      strong Other
+    li
+      | Redirect URI:
+      code https://localhost:3000/authorization-code/callback
+    li
+      | Post Logout Redirect URI:
+      code https://localhost:3000
+  p
+    | The application configuration will be printed to
+    code .okta.env
+    | .
+  pre.
+  p Create a new file in your project folder called .env Copy the values to there
+  pre.
+  p
+    | _Note: You will need to edit
+    strong APP_BASEURL
+    |  after deploying to Azure_
+  p
+    | Use
+    code npm run start
+    |  to run the application.
+  h3#publish-to-azure Publish to Azure
+  p Install the Azure App Service Extension
+  p Log in to your Azure Account
+  p
+    | Use
+    strong Ctrl + Shift + p
+    |  to open the command palette
+  p
+    | Select
+    strong Azure App Service: Create New Web App...Advanced
+  p Give your application a new name
+  p
+    | Create a new resource group
+    | Give the resource group a name
+    | Select Node 16 LTS for the runtime stack
+    | Select Linux for the OS
+    | Select the closest location to you for the resource location
+    | Create a new App Service Plan
+    | Select
+    strong Free (F1)
+    | Select
+    strong Skip for now
+    |  under application insights
+  p Give Azure a few minutes to set up and a display will show up
+  p
+    | Click
+    strong Deploy
+  p
+    | Wait a few minutes. After Azure is done it will display a link to you. Open the Azure Extension and open your app's
+    code .env
+    |  file. Replace the empty value in your application with this one. Remember to remove the trailing slash.
+  p Reload your site, your app should be loading.
+  h3#finish-okta-setup Finish Okta Setup
+  p Navigate back to your Okta dashboard
+  p
+    | Find the application you created for this project and click
+    strong Edit
+    |  under
+    em General Settings
+  p
+    | Under
+    em Login
+    | , find the setting for
+    em Sign-in redirect URIs
+    |  and add the value for your app's base domain +
+    code /authorization-code/callback
+    | . For example, mine looks like this:
+    code https://okta-azure.azurewebsites.net/authorization-code/callback
+  p
+    | Under signout redirect, add a value for your application's domain. Again, mine looks like this:
+    code https://okta-azure.azurewebsites.net
+  p
+    | Navigate to your application, you should see the home page. Try to log in and see your profile then log out.
+  h2#links Links
+  p This example uses the following open source libraries from Okta:
+  ul
+    li
+      a(href='https://developer.okta.com/code/nodejs/') Okta with NodeJs
+    li
+      a(href='https://www.npmjs.com/package/@okta/oidc-middleware') Okta OIDC Middleware
+    li
+      a(href='https://github.com/okta/okta-cli') Okta CLI
+  h2#help Help
+  p
+    | Please post any questions as comments on the
+    a(href='https://developer.okta.com/blog/2021/xyz') blog post
+    | , or visit our
+    a(href='https://devforum.okta.com/') Okta Developer Forums
+    | .
+  h2#license License
+  p
+    | Apache 2.0, see
+    a(href='LICENSE') LICENSE
+    | .
